@@ -1,0 +1,14 @@
+---
+- name: Descarga y descomprime osticket
+  unarchive:
+    src: https://github.com/osTicket/osTicket/releases/download/v1.16.3/osTicket-v1.16.3.zip
+    dest: /var/www/
+    remote_src: yes
+
+- name: Creando los archivos de configuración
+  copy:
+    src: /var/www/osTicket/upload/include/ost-sampleconfig.php
+    dest: /var/www/osTicket/upload/include/ost-config.php
+    owner: "{{ usuario_apache }}"
+    group: "{{ grupo_apache }}"
+    mode: '0644'

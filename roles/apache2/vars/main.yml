@@ -1,0 +1,10 @@
+---
+mysql_root_password: eteZZisn
+usuario_osticket: osticket_user
+pass_osticket: osticket_pass
+db: osticket_db
+http_port: "80"
+http_host: osticket.cultura.gob.ar
+http_conf: osticket.conf
+usuario_apache: www-data
+grupo_apache: www-data

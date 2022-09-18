@@ -1,0 +1,8 @@
+---
+- hosts: osticket
+  become: yes
+
+  roles:
+    - mariadb
+    - apache2
+    #- plugin -- to-do
