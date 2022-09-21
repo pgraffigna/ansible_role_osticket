@@ -1,5 +1,5 @@
 [osticket]
-192.168.121.229
+192.168.121.227
 
 [osticket:vars]
 ansible_ssh_user=vagrant

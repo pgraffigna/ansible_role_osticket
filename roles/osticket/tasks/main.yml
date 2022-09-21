@@ -1,14 +1,74 @@
 ---
+- name: Instalar Apache
+  apt:
+    name: apache2
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Iniciar Apache
+  service:
+    name: apache2
+    state: started
+    enabled: true
+
+- name: Instalar dependencias para php
+  apt:
+    name: [ 'lsb-release', 'ca-certificates', 'apt-transport-https', 'software-properties-common', 'curl', 'wget', 'unzip' ]
+
+- name: Agregar PPA para PHP 8.0
+  apt_repository:
+    repo: ppa:ondrej/php
+
+- name: Instalar PHP 8.0
+  apt:
+    name: [ 'php8.0', 'php8.0-common', 'php8.0-fpm', 'php8.0-imap', 'php8.0-apcu', 'php8.0-intl', 'php8.0-cgi', 'php8.0-mbstring', 'php8.0-gd', 'php8.0-mysql', 'php8.0-bcmath', 'php8.0-xml', 'php8.0-ldap' ]
+    update_cache: true
+
+- name: Creando directorio para proyecto
+  file:
+    path: /var/www/osTicket
+    state: directory
+    owner: "{{ usuario_apache }}"
+    group: "{{ grupo_apache }}"
+    mode: 0775
+
 - name: Descarga y descomprime osticket
   unarchive:
     src: https://github.com/osTicket/osTicket/releases/download/v1.16.3/osTicket-v1.16.3.zip
-    dest: /var/www/
-    remote_src: yes
+    dest: /var/www/osTicket
+    remote_src: true
 
-- name: Creando los archivos de configuración
+- name: Copiando archivos de configuración
   copy:
     src: /var/www/osTicket/upload/include/ost-sampleconfig.php
     dest: /var/www/osTicket/upload/include/ost-config.php
-    owner: "{{ usuario_apache }}"
-    group: "{{ grupo_apache }}"
-    mode: '0644'
+    mode: '0666'
+    remote_src: true
+
+- name: Limpiando y habilitando modulos PHP
+  shell: |
+    /usr/sbin/a2dissite 000-default.conf
+    /usr/bin/rm /var/www/html/index.html
+    a2enmod proxy_fcgi setenvif
+    a2enconf php8.0-fpm
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: reloaded
+
+- name: Apache virtualhost
+  template:
+    src: "files/osticket.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ http_conf }}"
+
+- name: Activar sitio
+  shell: /usr/sbin/a2ensite {{ http_conf }}
+  notify: reiniciar_apache
+
+# - name: Permitir puerto {{ http_port }} en UFW"
+#   ufw:
+#     rule: allow
+#     port: "{{ http_port }}"
+#     proto: tcp
+

@@ -4,5 +4,5 @@
 
   roles:
     - mariadb
-    - apache2
-    #- plugin -- to-do
+    - osticket
+    - plugins
