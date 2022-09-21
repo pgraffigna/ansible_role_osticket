@@ -1,0 +1,16 @@
+---
+#### mariadb #######
+mysql_root_password: eteZZisn
+usuario: osticket_user
+password: osticket_pass
+db: osticket_db
+#### osticket ######
+http_port: "80"
+http_host: osticket.cultura.gob.ar
+http_conf: osticket.conf
+usuario_apache: www-data
+grupo_apache: www-data
+php_old: "7.4"
+php_new: "8.0"
+ost_old: "1.14.6"
+ost_new: "1.16.3"

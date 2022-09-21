@@ -1,4 +1,6 @@
 ---
+- include_vars: ../../vars_main.yml
+
 - name: Instalacion mariaDB
   apt:
     name: [ 'mariadb-server', 'python3-pymysql' ]

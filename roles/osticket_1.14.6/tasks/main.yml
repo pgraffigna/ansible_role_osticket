@@ -1,4 +1,6 @@
 ---
+- include_vars: ../../vars_main.yml
+
 - name: Instalar Apache
   apt:
     name: apache2
@@ -15,13 +17,13 @@
   apt:
     name: [ 'lsb-release', 'ca-certificates', 'apt-transport-https', 'software-properties-common', 'curl', 'wget', 'unzip' ]
 
-- name: Agregar PPA para PHP 8.0
+- name: "Agregar PPA para PHP {{ php_old }}"
   apt_repository:
     repo: ppa:ondrej/php
 
-- name: Instalar PHP 8.0
+- name: "Instalar PHP {{ php_old }}"
   apt:
-    name: [ 'php8.0', 'php8.0-common', 'php8.0-fpm', 'php8.0-imap', 'php8.0-apcu', 'php8.0-intl', 'php8.0-cgi', 'php8.0-mbstring', 'php8.0-gd', 'php8.0-mysql', 'php8.0-bcmath', 'php8.0-xml', 'php8.0-ldap' ]
+    name: [ 'php{{ php_old }}', 'php{{ php_old }}-common', 'php{{ php_old }}-fpm', 'php{{ php_old }}-imap', 'php{{ php_old }}-apcu', 'php{{ php_old }}-intl', 'php{{ php_old }}-cgi', 'php{{ php_old }}-mbstring', 'php{{ php_old }}-gd', 'php{{ php_old }}-mysql', 'php{{ php_old }}-bcmath', 'php{{ php_old }}-xml', 'php{{ php_old }}-ldap' ]
     update_cache: true
 
 - name: Creando directorio para proyecto
@@ -32,9 +34,9 @@
     group: "{{ grupo_apache }}"
     mode: 0775
 
-- name: Descarga y descomprime osticket
+- name: "Descarga y descomprime osticket {{ ost_old }}"
   unarchive:
-    src: https://github.com/osTicket/osTicket/releases/download/v1.16.3/osTicket-v1.16.3.zip
+    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_old }}/osTicket-v{{ ost_old }}.zip"
     dest: /var/www/osTicket
     remote_src: true
 
@@ -50,7 +52,7 @@
     /usr/sbin/a2dissite 000-default.conf
     /usr/bin/rm /var/www/html/index.html
     a2enmod proxy_fcgi setenvif
-    a2enconf php8.0-fpm
+    a2enconf php{{ php_old }}-fpm
 
 - name: Restart Apache
   service:

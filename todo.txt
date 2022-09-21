@@ -1,2 +1,0 @@
-condicional para versiones menos de 15 php-7.4
-condicional para versiones mayores php-8.0

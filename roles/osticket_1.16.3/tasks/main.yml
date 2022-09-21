@@ -1,0 +1,76 @@
+---
+- include_vars: ../../vars_main.yml
+
+- name: Instalar Apache
+  apt:
+    name: apache2
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Iniciar Apache
+  service:
+    name: apache2
+    state: started
+    enabled: true
+
+- name: Instalar dependencias para php
+  apt:
+    name: [ 'lsb-release', 'ca-certificates', 'apt-transport-https', 'software-properties-common', 'curl', 'wget', 'unzip' ]
+
+- name: "Agregar PPA para PHP {{ php_new }}"
+  apt_repository:
+    repo: ppa:ondrej/php
+
+- name: "Instalar PHP {{ php_new }}"
+  apt:
+    name: [ 'php{{ php_new }}', 'php{{ php_new }}-common', 'php{{ php_new }}-fpm', 'php{{ php_new }}-imap', 'php{{ php_new }}-apcu', 'php{{ php_new }}-intl', 'php{{ php_new }}-cgi', 'php{{ php_new }}-mbstring', 'php{{ php_new }}-gd', 'php{{ php_new }}-mysql', 'php{{ php_new }}-bcmath', 'php{{ php_new }}-xml', 'php{{ php_new }}-ldap' ]
+    update_cache: true
+
+- name: Creando directorio para proyecto
+  file:
+    path: /var/www/osTicket
+    state: directory
+    owner: "{{ usuario_apache }}"
+    group: "{{ grupo_apache }}"
+    mode: 0775
+
+- name: "Descarga y descomprime osticket {{ ost_new }}"
+  unarchive:
+    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_new }}/osTicket-v{{ ost_new }}.zip"
+    dest: /var/www/osTicket
+    remote_src: true
+
+- name: Copiando archivos de configuración
+  copy:
+    src: /var/www/osTicket/upload/include/ost-sampleconfig.php
+    dest: /var/www/osTicket/upload/include/ost-config.php
+    mode: '0666'
+    remote_src: true
+
+- name: Limpiando y habilitando modulos PHP
+  shell: |
+    /usr/sbin/a2dissite 000-default.conf
+    /usr/bin/rm /var/www/html/index.html
+    a2enmod proxy_fcgi setenvif
+    a2enconf php{{ php_new }}-fpm
+
+- name: Restart Apache
+  service:
+    name: apache2
+    state: reloaded
+
+- name: Apache virtualhost
+  template:
+    src: "files/osticket.conf.j2"
+    dest: "/etc/apache2/sites-available/{{ http_conf }}"
+
+- name: Activar sitio
+  shell: /usr/sbin/a2ensite {{ http_conf }}
+  notify: reiniciar_apache
+
+# - name: Permitir puerto {{ http_port }} en UFW"
+#   ufw:
+#     rule: allow
+#     port: "{{ http_port }}"
+#     proto: tcp
+
