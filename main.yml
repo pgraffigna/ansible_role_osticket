@@ -4,6 +4,6 @@
 
   roles:
     #- mariadb
-    #- osticket_1.14.6
-    - osticket_1.16.3
+    - osticket_1.14.6
+    #- osticket_1.16.3
     - plugins
