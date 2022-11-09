@@ -1,6 +1,6 @@
 ---
 #### mariadb #######
-mysql_root_password: eteZZisn
+mysql_root_password: mysql_pass
 usuario: osticket_user
 password: osticket_pass
 db: osticket_db

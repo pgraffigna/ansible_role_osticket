@@ -68,9 +68,3 @@
   shell: /usr/sbin/a2ensite {{ http_conf }}
   notify: reiniciar_apache
 
-# - name: Permitir puerto {{ http_port }} en UFW"
-#   ufw:
-#     rule: allow
-#     port: "{{ http_port }}"
-#     proto: tcp
-

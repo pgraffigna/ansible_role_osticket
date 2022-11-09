@@ -3,7 +3,7 @@
   become: yes
 
   roles:
-    #- mariadb
-    - osticket_1.14.6
-    #- osticket_1.16.3
+    - mariadb
+    - { role: osticket_1.14.6, tags: [ 'ost_viejo' ] }
+    - { role: osticket_1.16.3, tags: [ 'ost_nuevo' ] }
     - plugins

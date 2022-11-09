@@ -13,10 +13,6 @@
     state: started
     enabled: true
 
-# - name: Instalar dependencias para php
-#   apt:
-#     name: [ 'lsb-release', 'ca-certificates', 'apt-transport-https', 'software-properties-common', 'curl', 'wget', 'unzip' ]
-
 - name: "Instalar PHP {{ php_old }}"
   apt:
     name: [ 'unzip', 'php{{ php_old }}', 'php{{ php_old }}-common', 'php{{ php_old }}-fpm', 'php{{ php_old }}-imap', 'php{{ php_old }}-apcu', 'php{{ php_old }}-intl', 'php{{ php_old }}-cgi', 'php{{ php_old }}-mbstring', 'php{{ php_old }}-gd', 'php{{ php_old }}-mysql', 'php{{ php_old }}-bcmath', 'php{{ php_old }}-xml', 'php{{ php_old }}-ldap' ]
@@ -63,10 +59,4 @@
 - name: Activar sitio
   shell: /usr/sbin/a2ensite {{ http_conf }}
   notify: reiniciar_apache
-
-# - name: Permitir puerto {{ http_port }} en UFW"
-#   ufw:
-#     rule: allow
-#     port: "{{ http_port }}"
-#     proto: tcp
 
