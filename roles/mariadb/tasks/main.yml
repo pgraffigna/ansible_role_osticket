@@ -1,20 +1,22 @@
 ---
-- include_vars: ../../vars_main.yml
+- name: Incluye el archivo con las variables
+  ansible.builtin.include_vars:
+    file: vars_main.yml
 
 - name: Instalacion mariaDB
-  apt:
+  ansible.builtin.apt:
     name: [ 'mariadb-server', 'python3-pymysql' ]
     update_cache: true
     cache_valid_time: 3600
 
 - name: Creando mariaDB root password
-  mysql_user:
+  ansible.builtin.mysql_user:
     name: root
     password: "{{ mysql_root_password }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
 
 - name: Eliminar acceso anonimo
-  mysql_user:
+  ansible.builtin.mysql_user:
     name: ''
     host: localhost
     state: absent
@@ -22,21 +24,21 @@
     login_password: "{{ mysql_root_password }}"
 
 - name: Elimina la base de datos test
-  mysql_db:
+  ansible.builtin.mysql_db:
     name: test
     state: absent
     login_user: root
     login_password: "{{ mysql_root_password }}"
 
 - name: Crea la base de datos para osticket
-  mysql_db:
+  ansible.builtin.mysql_db:
     name: osticket_db
     state: present
     login_user: root
     login_password: "{{ mysql_root_password }}"
 
 - name: "Crea el usuario {{ usuario }}"
-  mysql_user:
+  ansible.builtin.mysql_user:
     name: "{{ usuario }}"
     password: "{{ password }}"
     host: localhost
@@ -46,9 +48,5 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
-
-- name: Inicia servicio mariadb
-  service:
-    name: mariadb
-    state: started
-  become: true
+  notify: iniciar_mariadb
+  

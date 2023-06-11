@@ -1,0 +1,12 @@
+---
+- name: iniciar_mariadb
+  ansible.builtin.service:
+    name: mariadb
+    enabled: true
+    state: started
+
+- name: reiniciar_apache
+  ansible.builtin.service:
+    name: apache2
+    state: restarted
+

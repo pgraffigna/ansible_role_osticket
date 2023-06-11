@@ -1,0 +1,18 @@
+---
+osticket_14_packages: 
+  - 'unzip'
+  - 'php{{ php_7 }}'
+  - 'php{{ php_7 }}-common'
+  - 'php{{ php_7 }}-fpm'
+  - 'php{{ php_7 }}-imap'
+  - 'php{{ php_7 }}-apcu'
+  - 'php{{ php_7 }}-intl'
+  - 'php{{ php_7 }}-cgi'
+  - 'php{{ php_7 }}-mbstring'
+  - 'php{{ php_7 }}-gd'
+  - 'php{{ php_7 }}-mysql'
+  - 'php{{ php_7 }}-bcmath'
+  - 'php{{ php_7 }}-xml'
+  - 'php{{ php_7 }}-ldap' 
+
+  

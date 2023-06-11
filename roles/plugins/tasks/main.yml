@@ -1,19 +1,21 @@
 ---
-- include_vars: ../../vars_main.yml
+- name: Incluye el archivo con las variables
+  ansible.builtin.include_vars:
+    file: vars_main.yml
 
 - name: Copiando los plugins en osTicket
-  copy:
+  ansible.builtin.copy:
     src: files/auth-ldap.phar
     dest: /var/www/osTicket/upload/include/plugins/auth-ldap.phar
     owner: "{{ usuario_apache }}"
     group: "{{ grupo_apache }}"
-    mode: '0644'
+    mode: 0644
 
 - name: Copiando paquete de idioma español
-  copy:
+  ansible.builtin.copy:
     src: files/es_AR.phar
     dest: /var/www/osTicket/upload/include/i18n/es_AR.phar
     owner: "{{ usuario_apache }}"
     group: "{{ grupo_apache }}"
-    mode: '0644'
+    mode: 0644
 

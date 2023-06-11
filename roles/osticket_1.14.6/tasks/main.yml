@@ -1,62 +1,54 @@
 ---
-- include_vars: ../../vars_main.yml
+- name: Incluye el archivo con las variables
+  ansible.builtin.include_vars:
+    file: vars_main.yml
 
 - name: Instalar Apache
-  apt:
+  ansible.builtin.apt:
     name: apache2
     update_cache: true
     cache_valid_time: 3600
 
-- name: Iniciar Apache
-  service:
-    name: apache2
-    state: started
-    enabled: true
-
-- name: "Instalar PHP {{ php_old }}"
-  apt:
-    name: [ 'unzip', 'php{{ php_old }}', 'php{{ php_old }}-common', 'php{{ php_old }}-fpm', 'php{{ php_old }}-imap', 'php{{ php_old }}-apcu', 'php{{ php_old }}-intl', 'php{{ php_old }}-cgi', 'php{{ php_old }}-mbstring', 'php{{ php_old }}-gd', 'php{{ php_old }}-mysql', 'php{{ php_old }}-bcmath', 'php{{ php_old }}-xml', 'php{{ php_old }}-ldap' ]
+- name: "Instalar PHP {{ php_7 }}"
+  ansible.builtin.apt:
+    name: "{{ item }}"
     update_cache: true
+  with_items: "{{ osticket_14_packages }}"  
 
 - name: Creando directorio para proyecto
-  file:
+  ansible.builtin.file:
     path: /var/www/osTicket
     state: directory
     owner: "{{ usuario_apache }}"
     group: "{{ grupo_apache }}"
     mode: 0775
 
-- name: "Descarga y descomprime osticket {{ ost_old }}"
-  unarchive:
-    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_old }}/osTicket-v{{ ost_old }}.zip"
+- name: "Descarga y descomprime osticket {{ ost_14 }}"
+  ansible.builtin.unarchive:
+    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_14 }}/osTicket-v{{ ost_14 }}.zip"
     dest: /var/www/osTicket
     remote_src: true
 
 - name: Copiando archivos de configuración
-  copy:
+  ansible.builtin.copy:
     src: /var/www/osTicket/upload/include/ost-sampleconfig.php
     dest: /var/www/osTicket/upload/include/ost-config.php
-    mode: '0666'
+    mode: 0666
     remote_src: true
 
 - name: Limpiando y habilitando modulos PHP
-  shell: |
+  ansible.builtin.shell: |
     /usr/sbin/a2dissite 000-default.conf
     /usr/bin/rm /var/www/html/index.html
     a2enmod proxy_fcgi setenvif
-    a2enconf php{{ php_old }}-fpm
-
-- name: Restart Apache
-  service:
-    name: apache2
-    state: reloaded
+    a2enconf php{{ php_7 }}-fpm
 
 - name: Apache virtualhost
-  template:
+  ansible.builtin.template:
     src: "files/osticket.conf.j2"
     dest: "/etc/apache2/sites-available/{{ http_conf }}"
 
 - name: Activar sitio
-  shell: /usr/sbin/a2ensite {{ http_conf }}
+  ansible.builtin.shell: /usr/sbin/a2ensite {{ http_conf }}
   notify: reiniciar_apache
 
