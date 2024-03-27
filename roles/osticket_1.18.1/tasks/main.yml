@@ -14,15 +14,15 @@
     name: "{{ item }}"
   with_items: "{{ php_dependencies }}"
 
-- name: "Agregar PPA para PHP {{ php_7 }}"
+- name: "Agregar PPA para PHP {{ php_8 }}"
   ansible.builtin.apt_repository:
     repo: ppa:ondrej/php
 
-- name: "Instalar PHP {{ php_7 }}"
+- name: "Instalar PHP {{ php_8 }}"
   ansible.builtin.apt:
     name: "{{ item }}" 
     update_cache: true
-  with_items: "{{ osticket_14_packages }}"
+  with_items: "{{ osticket_18_packages }}"
 
 - name: Creando directorio para proyecto
   ansible.builtin.file:
@@ -32,17 +32,10 @@
     group: "{{ grupo_apache }}"
     mode: 0775
 
-- name: "Descarga y descomprime osticket {{ ost_14 }}"
+- name: "Descarga y descomprime osticket {{ ost_18 }}"
   ansible.builtin.unarchive:
-    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_14 }}/osTicket-v{{ ost_14 }}.zip"
+    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_18 }}/osTicket-v{{ ost_18 }}.zip"
     dest: /var/www/osTicket
-    remote_src: true
-
-- name: Copiando archivos de configuración
-  ansible.builtin.copy:
-    src: /var/www/osTicket/upload/include/ost-sampleconfig.php
-    dest: /var/www/osTicket/upload/include/ost-config.php
-    mode: 0666
     remote_src: true
 
 - name: Eliminando index.html
@@ -95,3 +88,4 @@
 - name: Activar sitio
   ansible.builtin.shell: /usr/sbin/a2ensite {{ sitio_conf }}
   notify: reiniciar_apache
+

@@ -42,22 +42,58 @@
   ansible.builtin.copy:
     src: /var/www/osTicket/upload/include/ost-sampleconfig.php
     dest: /var/www/osTicket/upload/include/ost-config.php
-    mode: '0666'
+    mode: 0666
     remote_src: true
 
-- name: Limpiando y habilitando modulos PHP
-  ansible.builtin.shell: |
-    /usr/sbin/a2dissite 000-default.conf
-    /usr/bin/rm /var/www/html/index.html
-    a2enmod proxy_fcgi setenvif
-    a2enconf php{{ php_8 }}-fpm
+- name: Eliminando index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
+
+- name: Desactivando sitio por default 
+  command: a2dissite 000-default    
+
+- name: Activa Apache mods
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items: "{{ apache_mods }}"
+
+- name: Creando carpeta para SSL
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/ssl/certs
+    - /etc/ssl/private
+
+- name: Genera Private key
+  openssl_privatekey:
+    path: /etc/ssl/private/{{ sitio }}.key
+
+- name: Genera CSR
+  openssl_csr: 
+    path: /etc/ssl/certs/{{ sitio }}.csr
+    privatekey_path: /etc/ssl/private/{{ sitio }}.key 
+    common_name: "{{ sitio }}"
+    country_name: AR
+    email_address: "{{ email }}"
+    organization_name: Home
+
+- name: Genera Certificado auto-firmado
+  openssl_certificate:
+    path: /etc/ssl/certs/{{ sitio }}.crt
+    privatekey_path: /etc/ssl/private/{{ sitio }}.key
+    csr_path: /etc/ssl/certs/{{ sitio }}.csr
+    provider: selfsigned
 
 - name: Apache virtualhost
   ansible.builtin.template:
     src: "files/osticket.conf.j2"
-    dest: "/etc/apache2/sites-available/{{ http_conf }}"
+    dest: "/etc/apache2/sites-available/{{ sitio_conf }}"
 
 - name: Activar sitio
-  ansible.builtin.shell: /usr/sbin/a2ensite {{ http_conf }}
+  ansible.builtin.shell: /usr/sbin/a2ensite {{ sitio_conf }}
   notify: reiniciar_apache
+
 

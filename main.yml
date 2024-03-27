@@ -7,4 +7,5 @@
     - { role: mariadb, tags: [ 'mariadb' ] }
     - { role: osticket_1.14.6, tags: [ 'ost_14' ] }
     - { role: osticket_1.16.3, tags: [ 'ost_16' ] }
+    - { role: osticket_1.18.1, tags: [ 'ost_18' ] }
     - plugins

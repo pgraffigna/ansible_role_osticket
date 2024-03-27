@@ -1,7 +1,7 @@
 ---
 php_dependencies: [ 'lsb-release', 'ca-certificates', 'apt-transport-https', 'software-properties-common', 'curl', 'wget', 'unzip' ]
 
-osticket_16_packages: 
+osticket_18_packages: 
   - 'php{{ php_8 }}'
   - 'php{{ php_8 }}-common'
   - 'php{{ php_8 }}-fpm'
