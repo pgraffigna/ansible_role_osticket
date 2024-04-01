@@ -22,7 +22,6 @@ La idea del proyecto es automatizar vía ansible la instalación/configuración 
 
 ### Uso
 
-* Clonar proyecto + ejecutar playbooks
 ```
 git clone https://github.com/pgraffigna/ansible_role_osticket.git
 cd ansible_role_osticket
