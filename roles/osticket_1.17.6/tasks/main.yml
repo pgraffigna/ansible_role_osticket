@@ -3,14 +3,10 @@
   ansible.builtin.include_vars:
     file: vars_main.yml
 
-- name: Instalar dependencias para ost
+- name: Instalar dependencias para osticket
   ansible.builtin.apt:
     name: "{{ item }}"
   with_items: "{{ ost_dependencies }}"
-
-# - name: "Agregar PPA para PHP {{ php_8 }}"
-#   ansible.builtin.apt_repository:
-#     repo: ppa:ondrej/php
 
 - name: Creando directorio para proyecto
   ansible.builtin.file:
@@ -20,13 +16,10 @@
     group: "{{ grupo_apache }}"
     mode: 0755
 
-- name: "Descarga y descomprime osticket {{ ost_18 }}"
+- name: "Descarga y descomprime osticket {{ ost_17 }}"
   ansible.builtin.unarchive:
-    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_18 }}/osTicket-v{{ ost_18 }}.zip"
-    dest: "{{ ost_root_path }}"
-    # owner: "{{ usuario_apache }}"
-    # group: "{{ grupo_apache }}"
-    # mode: 0755
+    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_17 }}/osTicket-v{{ ost_17 }}.zip"
+    dest: /var/www/osticket
     remote_src: true
 
 - name: Copiando archivos de configuración

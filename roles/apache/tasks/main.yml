@@ -9,49 +9,18 @@
     update_cache: true
     cache_valid_time: 3600
 
-- name: Instalar dependencias para php
+- name: "Instalar PHP {{ php_8 }}"
   ansible.builtin.apt:
     name: "{{ item }}"
-  with_items: "{{ php_dependencies }}"
-
-- name: "Agregar PPA para PHP {{ php_7 }}"
-  ansible.builtin.apt_repository:
-    repo: ppa:ondrej/php
-
-- name: "Instalar PHP {{ php_7 }}"
-  ansible.builtin.apt:
-    name: "{{ item }}" 
-    update_cache: true
-  with_items: "{{ osticket_14_packages }}"
-
-- name: Creando directorio para proyecto
-  ansible.builtin.file:
-    path: /var/www/osTicket
-    state: directory
-    owner: "{{ usuario_apache }}"
-    group: "{{ grupo_apache }}"
-    mode: 0775
-
-- name: "Descarga y descomprime osticket {{ ost_14 }}"
-  ansible.builtin.unarchive:
-    src: "https://github.com/osTicket/osTicket/releases/download/v{{ ost_14 }}/osTicket-v{{ ost_14 }}.zip"
-    dest: /var/www/osTicket
-    remote_src: true
-
-- name: Copiando archivos de configuración
-  ansible.builtin.copy:
-    src: /var/www/osTicket/upload/include/ost-sampleconfig.php
-    dest: /var/www/osTicket/upload/include/ost-config.php
-    mode: 0666
-    remote_src: true
+  with_items: "{{ php_packages }}"
 
 - name: Eliminando index.html
   file:
     path: /var/www/html/index.html
     state: absent
 
-- name: Desactivando sitio por default 
-  command: a2dissite 000-default    
+- name: Desactivando sitio por default
+  command: a2dissite 000-default
 
 - name: Activa Apache mods
   apache2_module:
@@ -72,9 +41,9 @@
     path: /etc/ssl/private/{{ sitio }}.key
 
 - name: Genera CSR
-  openssl_csr: 
+  openssl_csr:
     path: /etc/ssl/certs/{{ sitio }}.csr
-    privatekey_path: /etc/ssl/private/{{ sitio }}.key 
+    privatekey_path: /etc/ssl/private/{{ sitio }}.key
     common_name: "{{ sitio }}"
     country_name: AR
     email_address: "{{ email }}"

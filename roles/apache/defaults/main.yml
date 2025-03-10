@@ -1,0 +1,16 @@
+php_packages:
+  - 'php'
+  - 'php-common'
+  - 'php-fpm'
+  - 'php-imap'
+  - 'php-intl'
+  - 'php-cgi'
+  - 'php-mbstring'
+  - 'php-gd'
+  - 'php-mysql'
+  - 'php-bcmath'
+  - 'php-xml'
+  - 'php-ldap'
+  - 'php-zip'
+
+apache_mods: [ 'rewrite','ssl' ]

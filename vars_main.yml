@@ -13,10 +13,8 @@ sitio_conf: osticket.conf
 email: testing@mail.com
 usuario_apache: www-data
 grupo_apache: www-data
-ost_14: "1.14.6"
-ost_16: "1.16.3"
+ost_17: "1.17.6"
 ost_18: "1.18.1"
 
-#### php #####
-php_7: "7.4"
-php_8: "8.0"
+### apache ####
+ost_root_path: /var/www/osticket

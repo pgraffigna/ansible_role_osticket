@@ -1,10 +1,10 @@
 <VirtualHost *:{{ https_port }}>
      ServerAdmin {{ email }}
-     DocumentRoot /var/www/osTicket/upload
+     DocumentRoot {{ ost_root_path }}/upload
      ServerName {{ sitio }}
      ServerAlias www.{{ sitio }}
 
-     <Directory /var/www/osTicket/>
+     <Directory {{ ost_root_path }}>
           Options FollowSymlinks
           AllowOverride All
           Require all granted

@@ -1,0 +1,2 @@
+---
+ost_dependencies: [ 'lsb-release', 'ca-certificates', 'apt-transport-https', 'software-properties-common', 'curl', 'wget', 'unzip' ]
