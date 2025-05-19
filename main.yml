@@ -1,12 +1,12 @@
 ---
 - hosts: osticket
-  become: yes
+  become: true
   gather_facts: false
 
   roles:
     - { role: mariadb, tags: [ 'db' ] }
     - { role: osticket_1.17.6, tags: [ 'ost_17' ] }
-    - { role: osticket_1.18.1, tags: [ 'ost_18' ] }
+    - { role: osticket_1.18.2, tags: [ 'ost_18' ] }
     - { role: apache, tags: [ 'web' ] }
     - { role: plugins, tags: [ 'plg' ] }
 

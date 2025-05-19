@@ -1,8 +1,8 @@
 ## ansible_role_osticket
 
-Ansible rol para instalar un servidor OsTicket v1.17.6/v1.18.1 + plugins.
+Ansible rol para instalar un servidor OsTicket v1.17.6/v1.18.2 + plugins.
 
-Testeado con Vagrant + QEMU + ubuntu_22.04.
+Testeado con Vagrant + QEMU + ubuntu_24.04.
 
 ---
 
@@ -11,7 +11,7 @@ La idea del proyecto es automatizar vía ansible la instalación/configuración 
 1. mariadb
 2. apache
 3. osticket_1.17.6
-4. osticket_1.18.1
+4. osticket_1.18.2
 5. plugins
 
 ### <u>Dependencias</u>

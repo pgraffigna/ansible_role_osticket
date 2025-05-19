@@ -1,5 +1,5 @@
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
-IMAGEN = "generic/ubuntu2204"
+IMAGEN = "boxen/ubuntu-24.04"
 HOSTNAME = "help.home.local"
 
 Vagrant.configure("2") do |config|
@@ -17,7 +17,3 @@ Vagrant.configure("2") do |config|
     end
   end
 end
-
-## todo
-# crear role apache
-# importar role apache en cada version de osticket

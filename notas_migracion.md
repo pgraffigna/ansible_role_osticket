@@ -23,8 +23,12 @@ sudo a2enconf php8.0-fpm
 sudo systemctl reload apache2.service
 sudo systemctl restart apache2
 ```
-#### exportar/importar db
+
+### migracion db
 ```sql
+# exportar db
 > mysqldump --opt -u root -p osticket_db > ~/osticket_backup.sql
+
+# importar db
 > mysqldump --opt -u root -p osticket_db < ~/osticket_backup.sql
 ```

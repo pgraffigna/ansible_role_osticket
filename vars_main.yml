@@ -14,7 +14,7 @@ email: testing@mail.com
 usuario_apache: www-data
 grupo_apache: www-data
 ost_17: "1.17.6"
-ost_18: "1.18.1"
+ost_18: "1.18.2"
 
 ### apache ####
 ost_root_path: /var/www/osticket
